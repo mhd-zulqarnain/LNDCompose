@@ -175,7 +175,7 @@ fun CardView(fruit: Fruit) {
                 contentDescription = fruit.desc,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(80.dp),
+                    .height(150.dp),
                 contentScale = ContentScale.Crop
             )
             Text(text = fruit.name, fontWeight = FontWeight.Bold)
