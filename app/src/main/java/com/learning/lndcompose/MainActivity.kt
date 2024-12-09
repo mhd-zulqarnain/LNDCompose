@@ -5,11 +5,14 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Home
@@ -17,21 +20,18 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.learning.lndcompose.ui.theme.LNDComposeTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,7 +72,7 @@ fun BottomNav() {
     val context = LocalContext.current
 
     BottomAppBar(
-        containerColor = Color.Red,
+        containerColor = Color.Black,
         contentColor = Color.White
     ) {
         Row(
@@ -97,34 +98,38 @@ fun BottomNav() {
         }
     }
 }
+
+
 @Composable
 fun Greeting( modifier: Modifier = Modifier) {
-    var progress by remember {
-        mutableStateOf(0.1f)
-    }
-    Column {
-        LinearProgressIndicator(
-            progress = progress,
-            color = Color.Green,
-            trackColor = Color.Gray,
-            modifier = Modifier.padding(8.dp)
-        )
-        Button(
-            {
-                progress += 0.1f
 
-                if (progress > 1&& progress!=1.0f)
-                    progress=0.0f
-            },
-            modifier = Modifier.padding(8.dp)
-        ) {
-            Text("Increase progress")
+    val list = List(16) { "List item ${it + 1}" }
+
+    LazyColumn(userScrollEnabled=true) {
+        items(list) { item ->
+            CardView(item)
         }
     }
-
-
 }
 
+@Composable
+fun CardView(title: String) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+            .padding(
+                16.dp
+            ),
+        colors = CardColors(
+            containerColor = Color.White,
+            contentColor = Color.Black, disabledContentColor = Color.Gray,
+            disabledContainerColor = Color.Gray
+        )
+    ) {
+        Text(text = title)
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
