@@ -5,19 +5,13 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Home
@@ -25,29 +19,33 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.learning.lndcompose.data.Fruit
+import androidx.navigation.NavController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.learning.lndcompose.ui.theme.LNDComposeTheme
 
 
@@ -68,12 +66,82 @@ class MainActivity : ComponentActivity() {
                     }
 
                 ) { innerPadding ->
-                    Content(
+                    NavigationHost(
                         modifier = Modifier.padding(innerPadding)
 
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun NavigationHost(modifier: Modifier = Modifier) {
+    val navController = rememberNavController()
+    NavHost(
+        modifier = modifier.padding(16.dp), navController = navController, startDestination = "first"
+    ) {
+        composable(route = "first") { FirstScreen(navController) }
+        composable(
+            route = "second/{name}/{age}",
+            arguments = listOf(
+                navArgument("name") {
+                    type = NavType.StringType
+                },
+                navArgument("age") {
+                    type = NavType.StringType
+                }
+            )
+        ) { navBackStackEntry ->
+            SecondScreen(
+                navController,
+                navBackStackEntry.arguments?.getString("name").toString(),
+                navBackStackEntry.arguments?.getString("age").toString()
+            )
+        }
+    }
+
+}
+
+@Composable
+fun FirstScreen(navController: NavController) {
+    var name by remember { mutableStateOf("") }
+    var age by remember { mutableStateOf("") }
+    Column {
+        TextField(
+            value = name,
+            onValueChange = {
+                name = it
+            }, placeholder = {
+                Text("Enter the name")
+            })
+        Spacer(modifier = Modifier.height(4.dp))
+        TextField(
+            value = age,
+            onValueChange = {
+                age = it
+            }, placeholder = {
+                Text("Enter the age")
+            })
+
+        Button(onClick = {
+            navController.navigate("second/$name/$age")
+        }) {
+            Text("Next Screen")
+        }
+    }
+}
+
+@Composable
+fun SecondScreen(navController: NavController, name: String, age: String) {
+    Column {
+        Text("2nd screen")
+        Text("Your name is $name and age is $age")
+        Button(onClick = {
+            navController.navigateUp()
+        }) {
+            Text("go back")
         }
     }
 }
@@ -111,80 +179,6 @@ fun BottomNav() {
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun Content(modifier: Modifier = Modifier) {
-
-
-    val groupList = mapOf(
-        "Fruits" to listOf(
-            Fruit("Apple", "its an apple", R.drawable.apple),
-            Fruit("Banana", "its a banana", R.drawable.bananas),
-            Fruit("Mango", "its an mango", R.drawable.mango),
-            Fruit("Grapes", "its grapes", R.drawable.grapes),
-        ),
-        "Vegetables" to listOf(
-            Fruit("Broccoli", "its a broccoli", R.drawable.brocoli),
-            Fruit("Carrot", "its a carrot", R.drawable.carrot),
-            Fruit("Lettuce", "its lettuce", R.drawable.lettuce),
-            Fruit("Onion", "its a onion", R.drawable.onion),
-            Fruit("eggplant", "its a eggplant", R.drawable.eggplant),
-
-            ),
-    )
-
-    LazyColumn(userScrollEnabled = true, modifier = modifier) {
-        groupList.forEach { (header, items) ->
-            stickyHeader {
-                Text(
-                    header, modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Gray).padding(16.dp),
-                    fontSize = 26.sp,
-                    textDecoration = TextDecoration.Underline,
-                    color = Color.White
-
-                )
-            }
-            items(items) { fruit ->
-                CardView(fruit)
-            }
-        }
-    }
-}
-
-
-@Composable
-fun CardView(fruit: Fruit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(
-                16.dp
-            ),
-        colors = CardColors(
-            containerColor = Color.White,
-            contentColor = Color.Black, disabledContentColor = Color.Gray,
-            disabledContainerColor = Color.Gray
-        )
-    ) {
-        Column {
-            Image(
-                painter = painterResource(fruit.image),
-                contentDescription = fruit.desc,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp),
-                contentScale = ContentScale.Crop
-            )
-            Text(text = fruit.name, fontWeight = FontWeight.Bold)
-            Text(text = fruit.desc)
-
-        }
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar() {
@@ -220,7 +214,5 @@ fun TopBar() {
 @Composable
 fun GreetingPreview() {
     LNDComposeTheme {
-        val fruit = Fruit("test", "test fruit", R.drawable.carrot)
-        CardView(fruit)
     }
 }
