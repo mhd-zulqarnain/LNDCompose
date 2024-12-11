@@ -84,13 +84,15 @@ fun NavigationHost(modifier: Modifier = Modifier) {
     ) {
         composable(route = "first") { FirstScreen(navController) }
         composable(
-            route = "second/{name}/{age}",
+            //for optional argument we send by using ?
+            route = "second/{name}?age={age}",
             arguments = listOf(
                 navArgument("name") {
                     type = NavType.StringType
                 },
                 navArgument("age") {
                     type = NavType.StringType
+                    nullable =true
                 }
             )
         ) { navBackStackEntry ->
@@ -125,8 +127,9 @@ fun FirstScreen(navController: NavController) {
                 Text("Enter the age")
             })
 
+        //for optional argument we send by using ?
         Button(onClick = {
-            navController.navigate("second/$name/$age")
+            navController.navigate("second/$name?age=$age")
         }) {
             Text("Next Screen")
         }
