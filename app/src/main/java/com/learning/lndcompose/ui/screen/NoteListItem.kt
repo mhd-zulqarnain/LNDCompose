@@ -20,6 +20,7 @@ fun NoteListItem(note: Note) {
 
     Card(
         elevation = CardDefaults.cardElevation(12.dp),
+        modifier = Modifier.padding(2.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(note.color)
         )
@@ -37,7 +38,7 @@ fun NoteListItem(note: Note) {
             Text(
                 text = note.description,
                 fontSize = 12.sp,
-                fontWeight = FontWeight.Thin
+                fontWeight = FontWeight.Normal
             )
         }
     }

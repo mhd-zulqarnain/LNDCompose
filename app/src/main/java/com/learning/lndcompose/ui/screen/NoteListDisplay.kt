@@ -17,7 +17,7 @@ fun NoteListDisplay(
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp)
+        contentPadding = PaddingValues(16.dp,24.dp)
     ) {
         items(notes) { note ->
             NoteListItem(note)
