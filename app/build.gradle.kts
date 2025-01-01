@@ -57,6 +57,12 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
+    implementation (libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation (libs.gson)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -66,3 +72,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+
+
+//Here is your key: 9df7076
+//https://www.omdbapi.com/?s=Batman&page=2&apikey=9df7076
+//        Please append it to all of your API requests,

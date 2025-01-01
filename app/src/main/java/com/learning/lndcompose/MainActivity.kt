@@ -12,18 +12,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
-import com.learning.lndcompose.data.NoteRepository
-import com.learning.lndcompose.db.NoteDB
-import com.learning.lndcompose.ui.screen.DisplayDialog
-import com.learning.lndcompose.ui.screen.NoteListDisplay
-import com.learning.lndcompose.viewmodel.NoteViewmodel
+import com.learning.lndcompose.data.MovieRepository
+import com.learning.lndcompose.ui.screen.MovieList
+import com.learning.lndcompose.viewmodel.MovieViewmodel
 import com.learning.lndcompose.viewmodel.NoteViewmodelFactory
 
 
@@ -33,24 +30,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val database = NoteDB.getInstance(applicationContext)
-        val repository = NoteRepository(database.noteDoa)
+        val repository = MovieRepository(this)
         val viewModelFactory = NoteViewmodelFactory(repository)
-        val viewmodel = ViewModelProvider(this, viewModelFactory)[NoteViewmodel::class.java]
+        val viewmodel = ViewModelProvider(this, viewModelFactory)[MovieViewmodel::class.java]
 
-//        viewmodel.insertNote(
-//            Note(
-//                title = "test title",
-//                description = "test description",
-//                color = "#EFA22D".toColorInt()
-//            )
-//        )
         setContent {
             Scaffold(
                 floatingActionButton = { MyFab(viewmodel) }
             ) {
-                val notes by viewmodel.allNotes.observeAsState(emptyList())
-                NoteListDisplay(notes)
+                val movies = viewmodel.movies
+                MovieList(movies)
             }
         }
     }
@@ -58,14 +47,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 
-fun MyFab(viewModel: NoteViewmodel) {
+fun MyFab(viewModel: MovieViewmodel) {
     var showDialog by remember {
         mutableStateOf(false)
     }
 
-    DisplayDialog(viewModel, showDialog) {
-        showDialog = false
-    }
     FloatingActionButton(
         onClick = {
             showDialog = true
