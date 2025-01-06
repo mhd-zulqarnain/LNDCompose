@@ -14,10 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.learning.lndcompose.data.Movie
 
 @Composable
-fun MovieList(movies: List<Movie>) {
+fun MovieList(movies: List<Movie>, navController: NavHostController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -36,7 +37,7 @@ fun MovieList(movies: List<Movie>) {
         )
         LazyColumn {
             items(movies) { movie ->
-                MovieItem(movie)
+                MovieItem(movie,navController)
             }
         }
     }

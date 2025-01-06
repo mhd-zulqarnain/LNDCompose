@@ -3,14 +3,16 @@ package com.learning.lndcompose.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class MovieResponse(
     @SerializedName("Search") var movies: ArrayList<Movie> = arrayListOf(),
     @SerializedName("totalResults") var totalResults: String? = null,
     @SerializedName("Response") var response: String? = null
-
 )
 
+@Serializable
 @Entity(tableName = "movies_table")
 data class Movie(
     @PrimaryKey(autoGenerate = true)

@@ -3,6 +3,9 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt") apply true
+    id("kotlin-parcelize") apply true
+    alias(libs.plugins.jetbrains.kotlin.serialization)
+
 }
 
 android {
@@ -59,7 +62,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
-
+    implementation(libs.kotlinx.serialization.json)
     implementation (libs.retrofit)
     implementation(libs.converter.gson)
     implementation (libs.gson)

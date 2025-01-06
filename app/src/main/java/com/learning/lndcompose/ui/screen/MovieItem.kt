@@ -18,23 +18,29 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import com.learning.lndcompose.data.Movie
 
 @Composable
-fun MovieItem(movie: Movie) {
+fun MovieItem(movie: Movie, navController: NavHostController) {
     Card(
         elevation = CardDefaults.cardElevation(8.dp),
         modifier = Modifier
             .padding(12.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        onClick = {
+            navController.navigate(movie)
+        }
     ) {
         Row(modifier = Modifier.padding(8.dp)) {
             AsyncImage(model = movie.poster, contentDescription = null,
                 modifier = Modifier.clip(RoundedCornerShape(16.dp)))
             Column(
                 verticalArrangement = Arrangement.Center,
-                modifier = Modifier.padding(8.dp).fillMaxHeight()
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxHeight()
             ) {
                 Text(
                     "Title: ${movie.title}",
