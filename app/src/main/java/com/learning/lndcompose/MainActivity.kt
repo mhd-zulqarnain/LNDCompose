@@ -54,7 +54,7 @@ fun NavigationHost(viewmodel: MovieViewmodel) {
         }
         composable<Movie>{ backStackEntry ->
             val movie: Movie = backStackEntry.toRoute()
-            MovieDetailScreen(movie)
+            MovieDetailScreen(movie,navController)
         }
     }
 }
