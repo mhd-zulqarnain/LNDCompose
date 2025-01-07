@@ -9,11 +9,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import androidx.navigation.toRoute
 import com.learning.lndcompose.data.Movie
 import com.learning.lndcompose.data.MovieRepository
@@ -48,9 +46,10 @@ class MainActivity : ComponentActivity() {
 fun NavigationHost(viewmodel: MovieViewmodel) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Home) {
-        composable<Home> {
+        composable<Home> {backStackEntry->
+            val dataFromStack = backStackEntry.savedStateHandle.get<String>("movie_name")
             val movies = viewmodel.movies
-            MovieList(movies,navController)
+            MovieList(movies,navController,dataFromStack)
         }
         composable<Movie>{ backStackEntry ->
             val movie: Movie = backStackEntry.toRoute()

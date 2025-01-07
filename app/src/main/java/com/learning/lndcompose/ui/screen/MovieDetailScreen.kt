@@ -76,6 +76,10 @@ fun TopBar(
         },
         navigationIcon = {
             IconButton(onClick = {
+                navController.previousBackStackEntry?.savedStateHandle?.set(
+                    "movie_name",
+                    movie?.title
+                )
                 navController.popBackStack()
             }) {
                 Icon(Icons.Default.ArrowBack, contentDescription = null)
